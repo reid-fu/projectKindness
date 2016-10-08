@@ -4,7 +4,12 @@
   "name": "Project Kindness",
   "description": "This extension encourages users to think before they post",
   "version": "1.0",
-
+  "content_scripts": [
+    {
+      "matches": ["<all_urls>"],
+      "js": ["content-script.js"]
+    }
+  ],
   "browser_action": {
     "default_icon": "icon.png",
     "default_popup": "popup.html",
