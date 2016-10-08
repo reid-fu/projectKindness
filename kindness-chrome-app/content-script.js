@@ -25,19 +25,24 @@ function setupTextArea(textArea) {
     // elem.setAttribute("src", "icon.png");
     // inputField.parentElement.appendChild(elem);
     var oldParent = textArea.parentElement;
-    var newContainer = document.createElement("div");
 
-    var toolbar = document.createElement("div");
-    toolbar.style.height = "20px";
-    toolbar.style.backgroundColor = "yellow";
-    toolbar.style.width = "100%";
+    // make a new container for the textarea and bar
+    var newContainer = document.createElement("div");
+    $(newContainer).addClass("kindness-content");
+
+    // make the bar
+    var bar = document.createElement("div");
+    $(bar).addClass("kindness-bar")
+
+    // add content to the bar
     var toolbarText = document.createElement("p");
     $(toolbarText).text("Welcome to the Kindness Project.");
 
+    // insert everything needed
     oldParent.insertBefore(newContainer, textArea);
-    newContainer.appendChild(toolbar);
+    newContainer.appendChild(bar);
     newContainer.appendChild(textArea);
-    toolbar.appendChild(toolbarText);
+    bar.appendChild(toolbarText);
 
     // We have to check for modifications to these fields
     textArea.oninput = inputChanged();
