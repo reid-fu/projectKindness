@@ -38,11 +38,14 @@ function setupTextArea(textArea) {
     var toolbarText = document.createElement("p");
     $(toolbarText).text("Welcome to the Kindness Project.");
 
+    var logo = document.createElement("img");
+    logo.src = chrome.extension.getURL("kindness.png");
+
     // insert everything needed
     oldParent.insertBefore(newContainer, textArea);
     newContainer.appendChild(bar);
     newContainer.appendChild(textArea);
-    bar.appendChild(toolbarText);
+    bar.appendChild(logo);
 
     // We have to check for modifications to these fields
     $('textarea').bind('input propertychange', function() {
