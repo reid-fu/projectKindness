@@ -9,7 +9,7 @@ Chrome plugin that reminds people when they're about to post something offensive
 
 ## Workflow
 1. User types text in textbox. As user is typing, Chrome plugin sends text to server.
- - Send what user has typed so far every second, starting when user starts typing
+ - Send what user has typed so far every 7 characters
 2. Server filters text for nouns, verbs, adjectives, adverbs, participles, and interjections
  - Part of speech tagging done using Stanford CoreNLP. Tags follow Penn Treebank.
  - Noun tags start with "NN". Verb tags start with "VB". Adjectives start with "JJ".

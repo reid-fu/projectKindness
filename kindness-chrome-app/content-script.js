@@ -45,15 +45,19 @@ function setupTextArea(textArea) {
     bar.appendChild(toolbarText);
 
     // We have to check for modifications to these fields
-    textArea.oninput = inputChanged();
-    textArea.onpropertychange = textArea.oninput;
+    $('textarea').bind('input propertychange', function() {
+      inputChanged();
+    });
   }
 }
 
-function inputChanged() {
-  console.log("new text for analysis");
+charCount = 0;
+function inputChanged(textBox) {
+	charCount++;
+	if(charCount % 10 == 0)
+		sendInputForFeedback(textBox);
 }
 
-function sendInputForFeedback() {
+function sendInputForFeedback(textBox) {
 
 }
