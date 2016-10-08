@@ -6,7 +6,7 @@ import components.xmltree.XMLTree;
 public class AlchemySentimentTest {
 	private static String key = "bc5336851577a2cf1e01df99007fd2a538ef6298";
 	public static void main(String[] args) {
-		String sentence = "Shut up whore.";
+		String sentence = "I hate you. Go die.";
 		System.out.println(score(sentence));
 	}
 	public static double score(String comment) {
