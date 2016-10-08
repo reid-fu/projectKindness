@@ -6,20 +6,8 @@
  -->
 <html>
   <head>
+
     <title>Project Kindness's Popup</title>
-    <style>
-      body {
-        font-family: "Segoe UI", "Lucida Grande", Tahoma, sans-serif;
-        font-size: 100%;
-      }
-      #status {
-        /* avoid an excessively wide status text */
-        white-space: pre;
-        text-overflow: ellipsis;
-        overflow: hidden;
-        max-width: 400px;
-      }
-    </style>
 
     <!--
       - JavaScript and HTML must be in separate files: see our Content Security
@@ -27,13 +15,21 @@
       -
       - [1]: https://developer.chrome.com/extensions/contentSecurityPolicy
      -->
-    <!-- <script src="popup.js"></script> -->
+    <script src="popup.js"></script>
+
+    <link rel="stylesheet" type="text/css" href="base.css">
   </head>
   <body>
     <!-- <div id="status"></div>
     <img id="image-result" hidden> -->
-
-    <p>Welcome to Project Kindness.</p>
-    <a>learn more</a>
+    <div id="title-area">
+      <h1>Project Kindness</h1>
+    </div>
+    <div id="content">
+      <p>Welcome to Project Kindness.</p>
+    </div>
+    <div id="links">
+      <a href="http://www.google.com">learn more</a>
+    </div>
   </body>
 </html>
