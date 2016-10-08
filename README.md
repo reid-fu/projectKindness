@@ -8,5 +8,8 @@ Chrome plugin that reminds people when they're about to post something offensive
 - Web development framework with node.js, HTML, CSS
 
 ## Workflow
-- User types text in textbox. As user is typing, Chrome plugin sends text to server.
-* Markdown sublist test
+1. User types text in textbox. As user is typing, Chrome plugin sends text to server.
+2. Server filters text for nouns, verbs, adjectives, adverbs, participles, and interjections
+- Part of speech tagging done using Stanford CoreNLP. Tags follow Penn Treebank.
+- Noun tags start with "NN". Verb tags start with "VB". Adjectives start with "JJ".
+- Adverbs start with "RB". Participles (adjectives/nouns derived from verbs) are "RP". Interjections are "UH".
