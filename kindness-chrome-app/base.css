@@ -1,4 +1,31 @@
+* {
+  margin: 0px;
+  font-family: 'Roboto', sans-serif;
+}
+
 body {
-  font-family: "Segoe UI", "Lucida Grande", Tahoma, sans-serif;
   width: 300px;
+  background-color: white;
+}
+
+p {
+  font-size: 1.25em;
+  line-height: 1.5;
+}
+
+#title-area {
+  background-color: #FBA100;
+  padding: 25px;
+  text-align: center;
+  box-shadow: 0 2px 4px 0 rgba(0, 0, 0, 0.2), 0 3px 10px 0 rgba(0, 0, 0, 0.19);
+  color: white;
+}
+
+#content {
+  padding: 15px 10px;
+}
+
+#links {
+  padding: 10px;
+  text-align: right;
 }
