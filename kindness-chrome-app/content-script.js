@@ -25,6 +25,7 @@ function setupTextArea(textArea) {
     // elem.setAttribute("src", "icon.png");
     // inputField.parentElement.appendChild(elem);
     var oldParent = textArea.parentElement;
+    textArea.style.resize = "none";
 
     // make a new container for the textarea and bar
     var newContainer = document.createElement("div");
