@@ -45,8 +45,9 @@ function setupTextArea(textArea) {
     bar.appendChild(toolbarText);
 
     // We have to check for modifications to these fields
-    textArea.oninput = inputChanged();
-    textArea.onpropertychange = textArea.oninput;
+    $('textarea').bind('input propertychange', function() {
+      inputChanged();
+    });
   }
 }
 
