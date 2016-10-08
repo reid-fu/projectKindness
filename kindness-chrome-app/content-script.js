@@ -5,6 +5,12 @@ for (var i = 0; i < inputFields.length; i++) {
   if (inputField.getAttribute("type") == "text") {
     var elem = document.createElement("img");
     elem.setAttribute("src", "icon.png");
-    inputFields[i].parentElement.appendChild(elem);
+    inputField.parentElement.appendChild(elem);
+
+    // We have to check for modifications to these fields
+    inputField.oninput = function() {
+      console.log("new text for analysis");
+    };
+    inputField.onpropertychange = inputField.oninput;
   }
 }
