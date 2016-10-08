@@ -49,28 +49,30 @@ function setupTextArea(textArea) {
     bar.appendChild(logo);
 
     // We have to check for modifications to these fields
-    $('textarea').bind('input propertychange', function() {
-      inputChanged($('textarea'));
+    $(textArea).bind('input propertychange', function() {
+      inputChanged(textArea);
     });
   }
 }
 
 var charCount = 0;
-function inputChanged(textBox) {
-	console.log("input changed " + charCount);
-	charCount++;
-	if(charCount % 7 == 0)
-		sendInput(textBox);
+function inputChanged(textArea) {
+  console.log(textArea.value);
+	// console.log("input changed " + charCount);
+	// charCount++;
+	// if(charCount % 7 == 0)
+	// 	sendInput(textBox);
 }
-function sendInput(textBox) {
-	var xmlHttp = new XMLHttpRequest();
-    xmlHttp.onreadystatechange = function() { 
-        if (xmlHttp.readyState == 4 && xmlHttp.status == 200)
-            callback(xmlHttp.responseText);
-    }
-    text = encodeURIComponent(textBox.value);
-    url = "http://ec2-54-163-44-93.compute-1.amazonaws.com:1320/?text=" + text;
-    console.log(url);
-    xmlHttp.open("GET", url, true); // true for asynchronous
-    xmlHttp.send(null);
+
+function sendInput(textArea) {
+	// var xmlHttp = new XMLHttpRequest();
+  //   xmlHttp.onreadystatechange = function() {
+  //       if (xmlHttp.readyState == 4 && xmlHttp.status == 200)
+  //           callback(xmlHttp.responseText);
+  //   }
+  //   text = encodeURIComponent(textBox.value);
+  //   url = "http://ec2-54-163-44-93.compute-1.amazonaws.com:1320/?text=" + text;
+  //   console.log(url);
+  //   xmlHttp.open("GET", url, true); // true for asynchronous
+  //   xmlHttp.send(null);
 }
