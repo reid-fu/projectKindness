@@ -10,24 +10,22 @@ var alchemy_language = watson.alchemy_language({
 })
 
 
-app.post('/user/1', function (request, res) {
-	request.on('data', function(chunk) {
-		var body = [];
-		body.push(chunk);
+app.get('/', function (request, res) {
 		var parameters = {
-			text: Buffer.concat(body).toString()
-		}
+			text: request.query.text
+		};
+		//alchemy call
 		alchemy_language.sentiment(parameters, function (err, response) {
-		if (err)
-			console.log('error:', err);
-		else
-			res.a
-			console.log(JSON.stringify(response, null, 2));
-		});
-		console.log("Request received " + JSON.stringify(parameters.text));
-		
-	});
-   res.end("Access successful");
+       if (err)
+           console.log('error:', err);
+       else
+		   if(!("score" in response.docSentiment) && response.docSentiment == "neutral"){
+			   res.end("0");
+		   }else{
+			   res.end(response.docSentiment.score);
+		   }
+    console.log(JSON.stringify(response, null, 2));
+});
 })
 
 
@@ -36,5 +34,4 @@ var server = app.listen(8081, function () {
    var port = server.address().port
 
    console.log("Example app listening at http://%s:%s", host, port)
-})
-
+});
