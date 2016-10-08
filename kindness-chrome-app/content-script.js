@@ -26,11 +26,18 @@ function setupTextArea(textArea) {
     // inputField.parentElement.appendChild(elem);
     var oldParent = textArea.parentElement;
     var newContainer = document.createElement("div");
+
     var toolbar = document.createElement("div");
+    toolbar.style.height = "20px";
+    toolbar.style.backgroundColor = "yellow";
+    toolbar.style.width = "100%";
+    var toolbarText = document.createElement("p");
+    $(toolbarText).text("Welcome to the Kindness Project.");
 
     oldParent.insertBefore(newContainer, textArea);
     newContainer.appendChild(toolbar);
     newContainer.appendChild(textArea);
+    toolbar.appendChild(toolbarText);
 
     // We have to check for modifications to these fields
     textArea.oninput = inputChanged();
