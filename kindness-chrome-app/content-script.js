@@ -1,5 +1,6 @@
 $(document).ready(function() {
   console.log("page ready.");
+  window.charCount = 0;
   findTextAreas();
 
   $(document).on("DOMNodeInserted", function(e) {
@@ -51,11 +52,9 @@ function setupTextArea(textArea) {
   }
 }
 
-var charCount = 0;
 function inputChanged(textBox) {
-	console.log("input changed " + charCount);
-	charCount++;
-	if(charCount % 7 == 0)
+	window.charCount++;
+	if(window.charCount % 7 == 0)
 		sendInput(textBox);
 }
 function sendInput(textBox) {
