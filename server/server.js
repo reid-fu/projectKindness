@@ -19,7 +19,7 @@ app.get('/', function (request, res) {
        if (err)
            console.log('error:', err);
        else
-		   if(!("score" in response.docSentiment) && response.docSentiment == "neutral"){
+		   if(!("score" in response.docSentiment) && response.docSentiment.type == "neutral"){
 			   res.end("0");
 		   }else{
 			   res.end(response.docSentiment.score);
