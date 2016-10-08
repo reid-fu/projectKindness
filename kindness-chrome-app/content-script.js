@@ -54,10 +54,13 @@ function setupTextArea(textArea) {
   }
 }
 
-function inputChanged() {
-  console.log("new text for analysis");
+charCount = 0;
+function inputChanged(textBox) {
+	charCount++;
+	if(charCount % 10 == 0)
+		sendInputForFeedback(textBox);
 }
 
-function sendInputForFeedback() {
+function sendInputForFeedback(textBox) {
 
 }
