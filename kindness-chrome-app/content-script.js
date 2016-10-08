@@ -46,18 +46,27 @@ function setupTextArea(textArea) {
 
     // We have to check for modifications to these fields
     $('textarea').bind('input propertychange', function() {
-      inputChanged();
+      inputChanged($('textarea'));
     });
   }
 }
 
-charCount = 0;
+var charCount = 0;
 function inputChanged(textBox) {
+	console.log("input changed " + charCount);
 	charCount++;
-	if(charCount % 10 == 0)
-		sendInputForFeedback(textBox);
+	if(charCount % 7 == 0)
+		sendInput(textBox);
 }
-
-function sendInputForFeedback(textBox) {
-
+function sendInput(textBox) {
+	var xmlHttp = new XMLHttpRequest();
+    xmlHttp.onreadystatechange = function() { 
+        if (xmlHttp.readyState == 4 && xmlHttp.status == 200)
+            callback(xmlHttp.responseText);
+    }
+    text = encodeURIComponent(textBox.value);
+    url = "http://ec2-54-163-44-93.compute-1.amazonaws.com:1320/?text=" + text;
+    console.log(url);
+    xmlHttp.open("GET", url, true); // true for asynchronous
+    xmlHttp.send(null);
 }
