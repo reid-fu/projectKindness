@@ -1,5 +1,6 @@
 $(document).ready(function() {
   console.log("page ready.");
+  window.charCount = 0;
   findTextAreas();
 
   $(document).on("DOMNodeInserted", function(e) {
@@ -55,24 +56,22 @@ function setupTextArea(textArea) {
   }
 }
 
-var charCount = 0;
-function inputChanged(textArea) {
-  console.log(textArea.value);
-	// console.log("input changed " + charCount);
-	// charCount++;
-	// if(charCount % 7 == 0)
-	// 	sendInput(textBox);
+function inputChanged(textBox) {
+	window.charCount++;
+	console.log(charCount);
+	if(window.charCount % 7 == 0){
+		sendInput(textBox);
+	}
 }
-
 function sendInput(textArea) {
-	// var xmlHttp = new XMLHttpRequest();
-  //   xmlHttp.onreadystatechange = function() {
-  //       if (xmlHttp.readyState == 4 && xmlHttp.status == 200)
-  //           callback(xmlHttp.responseText);
-  //   }
-  //   text = encodeURIComponent(textBox.value);
-  //   url = "http://ec2-54-163-44-93.compute-1.amazonaws.com:1320/?text=" + text;
-  //   console.log(url);
-  //   xmlHttp.open("GET", url, true); // true for asynchronous
-  //   xmlHttp.send(null);
+	 var xmlHttp = new XMLHttpRequest();
+     xmlHttp.onreadystatechange = function() {
+         if (xmlHttp.readyState == 4 && xmlHttp.status == 200)
+             callback(xmlHttp.responseText);
+     }
+     text = encodeURIComponent(textBox.value);
+     url = "https://ec2-54-163-44-93.compute-1.amazonaws.com:8443/?text=" + text;
+     console.log(url);
+     xmlHttp.open("GET", url, true); // true for asynchronous
+     xmlHttp.send(null);
 }
