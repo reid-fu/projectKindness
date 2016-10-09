@@ -42,7 +42,7 @@ var getQueryPrefix = "SELECT * FROM ngramsentiment WHERE ngram=";
 
 var countPhra = require('./countPhrases2');
 
-
+var lock = false;
 app.get('/', function (request, res) {
 		var arr = countPhra.count(request.query.text);
 		console.log(arr);
@@ -77,28 +77,38 @@ alchemy_language.sentiment(parameters, function (err, response) {
 	}
 	//console.log(insertStmt);
 	con.query(insertStmt);
+	while(lock){}
+	lock = true;
+	average += ret;
+	++count;
+	lock = false;
 	//console.log(JSON.stringify(response, null, 2));
 	}});
 }else{
-	if(rows[0].sentiment > 1){
+	if(rows[0].sentiment > 10){
 		ret += (rows[0].sentiment / 1000000);
 	}else{
 		ret += (rows[0].sentiment);
 	}
-	console.log("ret = " + ret);
+	//console.log("ret = " + ret);
+	while(lock){}
+	lock = true;
+	average += ret;
+	++count;
+	lock = false;
 }
 });
-return ret;
 };
-average += fun(i);
-count++;
-callback();
-}
-}
+while(count < arr.length - 1){
 
-func(function(){
-console.log(average);
-res.end("" + average/arr.length);})
+}
+callback(average);
+}
+};
+
+func(function(avg){
+console.log(avg);
+res.end("" + avg/arr.length);});
 
 
 });
