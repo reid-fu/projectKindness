@@ -47,17 +47,18 @@ var getQueryPrefix = "SELECT * FROM ngramsentiment WHERE ngram=";
 
 var countPhra = require('./countPhrases2');
 
+var lock = false;
 app.get('/', function(request, res) {
     var arr = countPhra.count(request.query.text);
     console.log(arr);
-    var average = 0;
-    var count = 0;
     var func = function(callback) {
+	var count = 0, average = 0;
         for (var i = 0; i < arr.length; i++) {
-            var fun = function(index) {
+            console.log("Inside for loop, iteration " + i);
+            var fun = function(index, callBack) {
+		console.log("Inside fun, index %s", index);
                 var ret = 0;
                 var input = getQueryPrefix + con.escape(arr[index]);
-                //console.log(arr[i]);
                 con.query(input, function(err, rows) {
                     if (err) throw err;
                     console.log(rows);
@@ -70,39 +71,55 @@ app.get('/', function(request, res) {
                             if (err) {
                                 console.log('error:', err);
                             } else {
+				console.log("executing if");
                                 var insertStmt = "insert into ngramsentiment values(" + con.escape(parameters.text) + ",";
                                 if (!("score" in response.docSentiment) && response.docSentiment.type == "neutral") {
                                     insertStmt += "0);";
-                                    ret += 0;
+                                    ret = 0;
                                 } else {
                                     insertStmt += (response.docSentiment.score * 1000000);
                                     insertStmt += ");";
-                                    ret += response.docSentiment.score;
+                                    ret = response.docSentiment.score;
                                 }
                                 //console.log(insertStmt);
                                 con.query(insertStmt);
+				while(lock){}
+				lock = true;
+				count++;
+				lock = false;
+				callBack(ret);
                                 //console.log(JSON.stringify(response, null, 2));
                             }
                         });
                     } else {
-                        if (rows[0].sentiment > 1) {
-                            ret += (rows[0].sentiment / 1000000);
+			console.log("Executing else");
+                        if (rows[0].sentiment > 10) {
+                            ret = (rows[0].sentiment / 1000000);
                         } else {
-                            ret += (rows[0].sentiment);
+                            ret = (rows[0].sentiment);
                         }
-                        console.log("ret = " + ret);
+			while(lock){}
+			lock = true;
+			count++;
+			lock = false;
+			callBack(ret);
                     }
                 });
-                return ret;
             };
-            average += fun(i);
-            count++;
-            callback();
-        }
+            fun(i, function(value){
+		console.log("ret = " + value);
+	     	while(lock) {}
+		lock = true;
+		average += value;
+		console.log("new avg = " + average);
+		lock = false;});
+       }
+	while(count < arr.length - 1){ }
+	callback();
     }
 
     func(function() {
-        console.log(average);
+        console.log("IN AVERAGE");
         res.end("" + average / arr.length);
     })
 });
