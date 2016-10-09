@@ -59,18 +59,18 @@ function setupTextArea(textArea) {
 function inputChanged(textBox) {
 	window.charCount++;
 	if(window.charCount % 7 == 0){
-		sendInput(textBox);
+		sendInput(textBox, null);
 	}
 }
-function sendInput(textArea) {
+function sendInput(textArea, callback) {
 	 var xmlHttp = new XMLHttpRequest();
      xmlHttp.onreadystatechange = function() {
-         if (xmlHttp.readyState == 4 && xmlHttp.status == 200)
+         if (xmlHttp.readyState == 4 && xmlHttp.status == 200){
              callback(xmlHttp.responseText);
+         }
      }
      text = encodeURIComponent(textArea.value);
      url = "https://ec2-54-163-44-93.compute-1.amazonaws.com:8443/?text=" + text;
-     console.log(url);
      xmlHttp.open("GET", url, true); // true for asynchronous
      xmlHttp.send(null);
 }
