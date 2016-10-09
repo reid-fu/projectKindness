@@ -18,8 +18,7 @@ var minWords = 0;
 var holder;
 var check1 = true, check2 = true, check3 = true;
 
-//cut off end line if in sentence
-sentence = cutEnd(sentence);
+sentence = sentence.trim();
 
 //setting first 3 instances of w1, w2, w3 and getting minWords
 for(var i = 0; i < sentence.length; i++){
@@ -77,15 +76,6 @@ removeRepeats(nGrams);
 
 //return word to call
 return nGrams;
-}
-
-//check if final index is ' ' and if so cut off last index
-function cutEnd(sentence){
-	if(sentence[sentence.length-1] == ' '){
-		sentence = sentence.slice(0, sentence.length-1);
-	}
-	//return to call sentence
-	return sentence;
 }
 
 //removes repeats in array
