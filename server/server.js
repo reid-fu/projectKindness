@@ -18,29 +18,64 @@ var app = express();
 app.use(bodyparser.json());
 app.use(bodyparser.urlencoded({ extended: true }));
 
+//database stuff.
+var mysql = require("mysql");
+var con = mysql.createConnection({
+  host: 'ngramcache.crdautjivo8k.us-east-1.rds.amazonaws.com',
+  port: 3306,
+  user: "viralpanda",
+  password: "viralIsCool",
+  database: "cache0"
+});
+
+con.connect(function(err){
+  if(err){
+    console.log('Error connecting to Db' + err);
+    throw err;
+  }
+  console.log('Connection established');
+});
+
+//db constants
+var getQueryPrefix = 'SELECT * FROM ngramsentiment WHERE ngram=';
 
 
 app.get('/', function (request, res) {
-		var parameters = {
-			text: request.query.text
-		};
-		//alchemy call
-		alchemy_language.sentiment(parameters, function (err, response) {
-       if (err)
-           console.log('error:', err);
-       else
-		   if(!("score" in response.docSentiment) && response.docSentiment.type == "neutral"){
-			   res.end("0");
-		   }else{
-			   res.end(response.docSentiment.score);
-		   }
-    console.log(JSON.stringify(response, null, 2));
+con.query(getQueryPrefix + request.query.text, function(err, rows){
+			if(rows.length == 0){
+				var parameters = {
+					text: request.query.text
+				};
+				//alchemy call
+				alchemy_language.sentiment(parameters, function (err, response) {
+				if (err)
+					console.log('error:', err);
+				else
+					if(!("score" in response.docSentiment) && response.docSentiment.type == "neutral"){
+			   
+						res.end("0");
+					}else{
+						res.end(response.docSentiment.score);
+					}
+					console.log(JSON.stringify(response, null, 2));
+				});
+			}else{
+				res.end(rows[0].sentiment);
+			}
+		});
 });
-})
 
 
 var httpServer = http.createServer(app);
 var httpsServer = https.createServer(credentials, app);
 
-httpServer.listen(8080);
-httpsServer.listen(8443);
+httpServer.listen(8080, function(){
+	var host = httpServer.address().address
+   var port = httpServer.address().port
+
+console.log("Example app listening at http://%s:%s", host, port)});
+httpsServer.listen(8443, function(){
+	 var host = httpsServer.address().address
+   var port = httpsServer.address().port
+
+console.log("Example app listening at http://%s:%s", host, port)});
