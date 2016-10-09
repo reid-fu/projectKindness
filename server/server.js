@@ -28,6 +28,7 @@ password: "viralIsCool",
 database: "cache0"
 });
 
+
 con.connect(function(err){
 		if(err){
 		console.log('Error connecting to Db' + err);
@@ -41,16 +42,13 @@ var getQueryPrefix = "SELECT * FROM ngramsentiment WHERE ngram=";
 
 var countPhra = require('./countPhrases2');
 
-var calls = [];
-
-//async stuff
-var async = require('async');
 
 app.get('/', function (request, res) {
 		var arr = countPhra.count(request.query.text);
 		console.log(arr);
 		var average = 0;
 		var count = 0;
+var func =	function(callback){
 		for(var i = 0; i < arr.length; i++){
 		var fun = function(index){
 		var ret = 0;
@@ -94,11 +92,15 @@ return ret;
 };
 average += fun(i);
 count++;
+callback();
+}
 }
 
-while(count < arr.length){};
+func(function(){
 console.log(average);
-res.end("" + average/arr.length);
+res.end("" + average/arr.length);})
+
+
 });
 
 
