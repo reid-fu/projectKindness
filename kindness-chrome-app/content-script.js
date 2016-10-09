@@ -26,6 +26,7 @@ function setupTextArea(textArea) {
     // elem.setAttribute("src", "icon.png");
     // inputField.parentElement.appendChild(elem);
     var oldParent = textArea.parentElement;
+    textArea.style.resize = "none";
 
     // make a new container for the textarea and bar
     var newContainer = document.createElement("div");
@@ -39,15 +40,18 @@ function setupTextArea(textArea) {
     var toolbarText = document.createElement("p");
     $(toolbarText).text("Welcome to the Kindness Project.");
 
+    var logo = document.createElement("img");
+    logo.src = chrome.extension.getURL("kindness.png");
+
     // insert everything needed
     oldParent.insertBefore(newContainer, textArea);
     newContainer.appendChild(bar);
     newContainer.appendChild(textArea);
-    bar.appendChild(toolbarText);
+    bar.appendChild(logo);
 
     // We have to check for modifications to these fields
-    $('textarea').bind('input propertychange', function() {
-      inputChanged($('textarea'));
+    $(textArea).bind('input propertychange', function() {
+      inputChanged(textArea);
     });
   }
 }
@@ -57,15 +61,15 @@ function inputChanged(textBox) {
 	if(window.charCount % 7 == 0)
 		sendInput(textBox);
 }
-function sendInput(textBox) {
-	var xmlHttp = new XMLHttpRequest();
-    xmlHttp.onreadystatechange = function() { 
-        if (xmlHttp.readyState == 4 && xmlHttp.status == 200)
-            callback(xmlHttp.responseText);
-    }
-    text = encodeURIComponent(textBox.value);
-    url = "http://ec2-54-163-44-93.compute-1.amazonaws.com:1320/?text=" + text;
-    console.log(url);
-    xmlHttp.open("GET", url, true); // true for asynchronous
-    xmlHttp.send(null);
+function sendInput(textArea) {
+	 var xmlHttp = new XMLHttpRequest();
+     xmlHttp.onreadystatechange = function() {
+         if (xmlHttp.readyState == 4 && xmlHttp.status == 200)
+             callback(xmlHttp.responseText);
+     }
+     text = encodeURIComponent(textBox.value);
+     url = "http://ec2-54-163-44-93.compute-1.amazonaws.com:1320/?text=" + text;
+     console.log(url);
+     xmlHttp.open("GET", url, true); // true for asynchronous
+     xmlHttp.send(null);
 }
