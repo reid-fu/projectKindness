@@ -6,6 +6,7 @@ Chrome plugin that reminds people when they're about to post something offensive
  - MySQL (later Amazon RDS) stores data used for text analysis
 - Chrome plugin scrapes and sends data from textboxes
 - Web development framework with node.js, HTML, CSS
+- Backend developed in JavaScript
 
 ## Workflow
 1. User types text in textbox. As user is typing, Chrome plugin sends text to server.
