@@ -1,5 +1,5 @@
 
-var common = ['and', 'is', 'am', 'I', 'where', 'you', 'he', 'she', 'they'];
+var common = require("./stopwords.js").stopwords;
 var commonSet = new Set(common);
 
 exports.count = function count(string){
