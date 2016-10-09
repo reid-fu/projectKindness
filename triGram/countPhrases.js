@@ -3,93 +3,60 @@ seperates phrases into TriGram and returns set
 of all words to call. Requires plain text String.
 */
 
+//main call function
 function main(input){
+//only get lower case of sentence identified
 var parse = input.toLowerCase();
+//get array of phrases
 var triGramArray = countPhrases(parse);
+//return array to call
 return triGramArray;
 }
 
 //counts total phrases used
 function countPhrases(sentence){
 //variables used
-var nGrams = []
+var nGrams = [];
 var w1, w2, w3;
-var minWords = 0;
-var holder;
-var check1 = true, check2 = true, check3 = true;
+var holder = 0;
+var totlen = sentence.length+1;
 
-sentence = sentence.trim();
+//take off all extra white space between and around sentence
+sentence = sentence.replace(/\s+/g, " ");
 
-//setting first 3 instances of w1, w2, w3 and getting minWords
-for(var i = 0; i < sentence.length; i++){
-	if(sentence.charAt(i) == ' ' || i == sentence.length-1){
-		minWords++;
-	}
-	if(minWords == 1 && check1){
-		w1 = sentence.slice(0, i);
-		holder = i+1;
-		check1 = false;
-	}
-	if(minWords == 2 && check2){
-		w2 = sentence.slice(holder, i);
-		holder = i+1;
-		check2 = false;
-	}
-	if(minWords == 3 && check3){
-		w3 = sentence.slice(holder, i);
-		holder = i+1;
-		check3 = false;
-	}
+//setting first 3 instances of w1, w2, w3
+for(var i = 0; i < totlen && nGrams.length < 3; i++){
+		if(sentence.charAt(i) == ' '){
+			nGrams.push(sentence.slice(holder, i));
+			holder = i+1;
+		}
 }
 
 //assigning first Ngrams
-nGrams.push(w1);
-nGrams.push(w2);
-nGrams.push(w3);
+w1 = nGrams[0];
+w2 = nGrams[1];
+w3 = nGrams[2];
 nGrams.push(w1 + " " + w2);
 nGrams.push(w2 + " " + w3);
 nGrams.push(w1 + " " + w2 + " " + w3);
 
 //creating remaining Ngrams
-for(var i = holder; i < sentence.length; i++){
+for(var i = holder; i < totlen; i++){
 	if(sentence.charAt(i) == ' '){
-		w1  = w2;
+		w1 = w2;
 		w2 = w3;
 		w3 = sentence.slice(holder, i);
 		holder = i+1;
 		nGrams.push(w3);
 		nGrams.push(w2 + " " + w3);
 		nGrams.push(w1 + " " + w2 + " " + w3);
-	}
-	if(i == sentence.length-1){
-		w1  = w2;
-		w2 = w3;
-		w3 = sentence.slice(holder, i+1);
-		nGrams.push(w3);
-		nGrams.push(w2 + " " + w3);
-		nGrams.push(w1 + " " + w2 + " " + w3);
-	}
+	 }
 }
 
-//remove repeats in Array
-removeRepeats(nGrams);
+//remove repeats from array
+var setNgrams = new Set(nGrams);
+nGrams = Array.from(setNgrams);
 
 //return word to call
 return nGrams;
-}
-
-//removes repeats in array
-function removeRepeats(nGrams){
-	//go through entire arrya of nGrams
-	for(var i = 0; i < nGrams.length; i++){
-		//compare one index to all other indexs'
-		for(var j = i+1; j < nGrams.length; j++){
-			//if two elements are equals spliace the repeat element at j out
-			if(nGrams[i] == nGrams[j]){
-				nGrams.splice(j,1);
-			}
-		}
-	}
-	//return to call nGrams without repeats
-	return nGrams;
 }
