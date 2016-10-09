@@ -1,0 +1,24 @@
+.kindness-bar {
+
+}
+
+.kindness-content {
+  background: #F4F4F4;
+  width: 100%;
+  height: auto;
+  border-radius: 5px;
+  border: 1px solid #A3A3A3;
+}
+
+}
+
+div.kindness-bar p {
+  margin-bottom: 0px;
+}
+
+div.kindness-bar img {
+  width: 20px;
+  height: 20px;
+  padding: 5px;
+  float: right;
+}

@@ -7,7 +7,8 @@
   "content_scripts": [
     {
       "matches": ["<all_urls>"],
-      "js": ["jquery-3.1.1.min.js", "content-script.js"]
+      "js": ["jquery-3.1.1.min.js", "content-script.js"],
+      "css": ["kindness.css"]
     }
   ],
   "browser_action": {
@@ -18,5 +19,6 @@
   "permissions": [
     "activeTab",
     "https://ajax.googleapis.com/"
-  ]
+  ],
+  "web_accessible_resources": ["kindness.png"]
 }

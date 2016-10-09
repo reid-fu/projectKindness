@@ -25,30 +25,54 @@ function setupTextArea(textArea) {
     // elem.setAttribute("src", "icon.png");
     // inputField.parentElement.appendChild(elem);
     var oldParent = textArea.parentElement;
-    var newContainer = document.createElement("div");
+    textArea.style.resize = "none";
 
-    var toolbar = document.createElement("div");
-    toolbar.style.height = "20px";
-    toolbar.style.backgroundColor = "yellow";
-    toolbar.style.width = "100%";
+    // make a new container for the textarea and bar
+    var newContainer = document.createElement("div");
+    $(newContainer).addClass("kindness-content");
+
+    // make the bar
+    var bar = document.createElement("div");
+    $(bar).addClass("kindness-bar")
+
+    // add content to the bar
     var toolbarText = document.createElement("p");
     $(toolbarText).text("Welcome to the Kindness Project.");
 
+    var logo = document.createElement("img");
+    logo.src = chrome.extension.getURL("kindness.png");
+
+    // insert everything needed
     oldParent.insertBefore(newContainer, textArea);
-    newContainer.appendChild(toolbar);
+    newContainer.appendChild(bar);
     newContainer.appendChild(textArea);
-    toolbar.appendChild(toolbarText);
+    bar.appendChild(logo);
 
     // We have to check for modifications to these fields
-    textArea.oninput = inputChanged();
-    textArea.onpropertychange = textArea.oninput;
+    $(textArea).bind('input propertychange', function() {
+      inputChanged(textArea);
+    });
   }
 }
 
-function inputChanged() {
-  console.log("new text for analysis");
+var charCount = 0;
+function inputChanged(textArea) {
+  console.log(textArea.value);
+	// console.log("input changed " + charCount);
+	// charCount++;
+	// if(charCount % 7 == 0)
+	// 	sendInput(textBox);
 }
 
-function sendInputForFeedback() {
-
+function sendInput(textArea) {
+	// var xmlHttp = new XMLHttpRequest();
+  //   xmlHttp.onreadystatechange = function() {
+  //       if (xmlHttp.readyState == 4 && xmlHttp.status == 200)
+  //           callback(xmlHttp.responseText);
+  //   }
+  //   text = encodeURIComponent(textBox.value);
+  //   url = "http://ec2-54-163-44-93.compute-1.amazonaws.com:1320/?text=" + text;
+  //   console.log(url);
+  //   xmlHttp.open("GET", url, true); // true for asynchronous
+  //   xmlHttp.send(null);
 }
