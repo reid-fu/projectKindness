@@ -37,13 +37,15 @@ con.connect(function(err){
 });
 
 //db constants
-var getQueryPrefix = "SELECT * FROM ngramsentiment WHERE ";
+var getQueryPrefix = "SELECT * FROM ngramsentiment WHERE ngram=";
 
 
 app.get('/', function (request, res) {
 		var input = getQueryPrefix + con.escape(request.query.text);
+		console.log(input);
 		 con.query(input, function(err, rows){
 			if(err) throw err;
+			console.log(rows);
 			if(rows.length == 0){
 				var parameters = {
 					text: request.query.text
@@ -62,12 +64,12 @@ app.get('/', function (request, res) {
 						insertStmt += ");";
 						res.end(response.docSentiment.score);
 					}
+					console.log(insertStmt);
 					con.query(insertStmt);
-					console.log(parameters.text);
 					console.log(JSON.stringify(response, null, 2));
 				}});
 			}else{
-				res.end(rows[0].sentiment / 1000000);
+				res.end("" + (rows[0].sentiment / 1000000));
 			}
 		});
 });
