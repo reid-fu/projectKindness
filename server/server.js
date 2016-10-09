@@ -37,30 +37,37 @@ con.connect(function(err){
 });
 
 //db constants
-var getQueryPrefix = 'SELECT * FROM ngramsentiment WHERE ngram=';
+var getQueryPrefix = "SELECT * FROM ngramsentiment WHERE ";
 
 
 app.get('/', function (request, res) {
-con.query(getQueryPrefix + request.query.text, function(err, rows){
+		var input = getQueryPrefix + con.escape(request.query.text);
+		 con.query(input, function(err, rows){
+			if(err) throw err;
 			if(rows.length == 0){
 				var parameters = {
 					text: request.query.text
 				};
 				//alchemy call
 				alchemy_language.sentiment(parameters, function (err, response) {
-				if (err)
+				if (err) {
 					console.log('error:', err);
-				else
+				} else {
+					var insertStmt = "insert into ngramsentiment values(" + con.escape(parameters.text) + ",";
 					if(!("score" in response.docSentiment) && response.docSentiment.type == "neutral"){
-			   
+						insertStmt += "0);";
 						res.end("0");
-					}else{
+					} else {
+						insertStmt += (response.docSentiment.score*1000000);
+						insertStmt += ");";
 						res.end(response.docSentiment.score);
 					}
+					con.query(insertStmt);
+					console.log(parameters.text);
 					console.log(JSON.stringify(response, null, 2));
-				});
+				}});
 			}else{
-				res.end(rows[0].sentiment);
+				res.end(rows[0].sentiment / 1000000);
 			}
 		});
 });

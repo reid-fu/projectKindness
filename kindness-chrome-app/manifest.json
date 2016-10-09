@@ -6,11 +6,16 @@
   "version": "1.0",
   "content_scripts": [
     {
-      "matches": ["<all_urls>"],
-      "js": ["jquery-3.1.1.min.js", "content-script.js"],
-      "css": ["kindness.css"]
+      "matches": [ "<all_urls>" ],
+      "js": [ "jquery-3.1.1.min.js", "content-script.js" ],
+      "css": [ "kindness.css" ]
     }
   ],
+  "icons": {
+    "16": "kindness.png",
+    "48": "kindness.png",
+    "128": "kindness.png"
+  },
   "browser_action": {
     "default_icon": "kindness.png",
     "default_popup": "popup.html",
