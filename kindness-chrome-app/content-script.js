@@ -1,6 +1,6 @@
 $(document).ready(function() {
   console.log("Page reported as ready.");
-  window.charCount = 0;
+  window.startTime = Date.now();
   findTextAreas();
 });
 
@@ -61,8 +61,8 @@ function setupTextArea(textArea) {
 }
 
 function inputChanged(textArea) {
-	window.charCount++;
-	if(window.charCount % 7 == 0) {
+	if((Date.now() - window.startTime) > 500) {
+		window.startTime = Date.now();
 		sendInput(textArea);
 	}
 }
