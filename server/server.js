@@ -41,7 +41,7 @@ var getQueryPrefix = "SELECT * FROM ngramsentiment WHERE ngram=\'";
 
 
 app.get('/', function (request, res) {
-con.query(getQueryPrefix + request.query.text + "\'", function(err, rows){
+		con.query(getQueryPrefix + request.query.text + "\'", function(err, rows){
 			if(err) throw err;
 			if(rows.length == 0){
 				var parameters = {
@@ -49,17 +49,21 @@ con.query(getQueryPrefix + request.query.text + "\'", function(err, rows){
 				};
 				//alchemy call
 				alchemy_language.sentiment(parameters, function (err, response) {
-				if (err)
+				if (err) {
 					console.log('error:', err);
-				else
+				} else {
+					var insertStmt = "insert into ngramsentiment values (";
+					insertStmt += parameters.text + ",";
 					if(!("score" in response.docSentiment) && response.docSentiment.type == "neutral"){
-			   
+						insertStmt += "0);";
 						res.end("0");
-					}else{
+					} else {
+						insertStmt += response.docSentiment.score + ");";
 						res.end(response.docSentiment.score);
 					}
+					con.query(insertStmt);
 					console.log(JSON.stringify(response, null, 2));
-				});
+				}});
 			}else{
 				res.end(rows[0].sentiment);
 			}
