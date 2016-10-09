@@ -58,8 +58,9 @@ function setupTextArea(textArea) {
 
 function inputChanged(textBox) {
 	window.charCount++;
-	if(window.charCount % 7 == 0)
+	if(window.charCount % 7 == 0){
 		sendInput(textBox);
+	}
 }
 function sendInput(textArea) {
 	 var xmlHttp = new XMLHttpRequest();
