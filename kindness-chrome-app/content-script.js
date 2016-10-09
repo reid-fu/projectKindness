@@ -1,20 +1,21 @@
 $(document).ready(function() {
-  console.log("page ready.");
+  console.log("Page reported as ready.");
   window.charCount = 0;
   findTextAreas();
+});
 
-  $(document).on("DOMNodeInserted", function(e) {
-    if ($(e.target).is("textarea")) {
-      console.log("new textarea available");
-       setupTextArea(e.target);
-    }
-  });
+$(document).on("DOMNodeInserted", function(e) {
+  if ($(e.target).is("textarea") && !$(e.target).is(".kindness-textarea")) {
+    console.log("New textarea available!");
+     setupTextArea(e.target);
+  }
 });
 
 function findTextAreas() {
   // Add an icon to all input fields of class text
-  console.log("finding textareas");
+  console.log("Searching for textareas...");
   var textAreas = document.getElementsByTagName("textarea");
+  console.log(textAreas)
   for (var i = 0; i < textAreas.length; i++) {
     setupTextArea(textAreas[i]);
   }
@@ -22,11 +23,14 @@ function findTextAreas() {
 
 function setupTextArea(textArea) {
   if (textArea.readOnly == false) {
+    console.log("Found a textarea. Modifying now...");
+    console.log(textArea);
     // var elem = document.createElement("img");
     // elem.setAttribute("src", "icon.png");
     // inputField.parentElement.appendChild(elem);
     var oldParent = textArea.parentElement;
     textArea.style.resize = "none";
+    $(textArea).addClass("kindness-textarea");
 
     // make a new container for the textarea and bar
     var newContainer = document.createElement("div");
@@ -58,10 +62,7 @@ function setupTextArea(textArea) {
 
 function inputChanged(textArea) {
 	window.charCount++;
-	if(window.charCount % 7 == 0){
-    console.log(textArea);
-    console.log(textArea.parentElement);
-    console.log($(textArea.parentElement).find(".kindness-bar"));
+	if(window.charCount % 7 == 0) {
 		sendInput(textArea);
 	}
 }
@@ -80,9 +81,6 @@ function sendInput(textArea) {
 }
 
 function callback(responseText, textArea) {
-  console.log(responseText);
-  console.log(textArea);
-  console.log(textArea.parentElement);
   var neededBar = $(textArea.parentElement).find(".kindness-bar");
   scaledReponse = responseText * 60.0;
   var hue = 60 + scaledReponse;
