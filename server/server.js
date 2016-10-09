@@ -47,6 +47,7 @@ var getQueryPrefix = "SELECT * FROM ngramsentiment WHERE ngram=";
 
 var countPhra = require('./countPhrases2');
 
+<<<<<<< HEAD
 
 app.get('/', function(request, res) {
     var arr = countPhra.count(request.query.text);
@@ -106,6 +107,75 @@ app.get('/', function(request, res) {
         console.log(average);
         res.end("" + average / arr.length);
     })
+=======
+var lock = false;
+app.get('/', function (request, res) {
+		var arr = countPhra.count(request.query.text);
+		console.log(arr);
+		var average = 0;
+		var count = 0;
+var func =	function(callback){
+		for(var i = 0; i < arr.length; i++){
+		var fun = function(index){
+		var ret = 0;
+		var input = getQueryPrefix + con.escape(arr[index]);
+		//console.log(arr[i]);
+		con.query(input, function(err, rows){
+				if(err) throw err;
+				console.log(rows);
+				if(rows.length == 0){
+var parameters = {
+	text: "" + arr[index]
+};
+//alchemy call
+alchemy_language.sentiment(parameters, function (err, response) {
+	if (err) {
+	console.log('error:', err);
+	} else {
+	var insertStmt = "insert into ngramsentiment values(" + con.escape(parameters.text) + ",";
+	if(!("score" in response.docSentiment) && response.docSentiment.type == "neutral"){
+	insertStmt += "0);";
+	ret += 0;
+	} else {
+	insertStmt += (response.docSentiment.score*1000000);
+	insertStmt += ");";
+	ret += response.docSentiment.score;
+	}
+	//console.log(insertStmt);
+	con.query(insertStmt);
+	while(lock){}
+	lock = true;
+	average += ret;
+	++count;
+	lock = false;
+	//console.log(JSON.stringify(response, null, 2));
+	}});
+}else{
+	if(rows[0].sentiment > 10){
+		ret += (rows[0].sentiment / 1000000);
+	}else{
+		ret += (rows[0].sentiment);
+	}
+	//console.log("ret = " + ret);
+	while(lock){}
+	lock = true;
+	average += ret;
+	++count;
+	lock = false;
+}
+});
+};
+while(count < arr.length - 1){
+
+}
+callback(average);
+}
+};
+
+func(function(avg){
+console.log(avg);
+res.end("" + avg/arr.length);});
+>>>>>>> origin/master
 
 
 });
