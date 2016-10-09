@@ -41,7 +41,7 @@ var getQueryPrefix = "SELECT * FROM ngramsentiment WHERE ngram=\'";
 
 
 app.get('/', function (request, res) {
-		con.query(getQueryPrefix + request.query.text + "\'", function(err, rows){
+		con.query(getQueryPrefix + request.query.text + "\';", function(err, rows){
 			if(err) throw err;
 			if(rows.length == 0){
 				var parameters = {
@@ -58,14 +58,14 @@ app.get('/', function (request, res) {
 						insertStmt += "0);";
 						res.end("0");
 					} else {
-						insertStmt += response.docSentiment.score + ");";
+						insertStmt += (response.docSentiment.score*1000000) + ");";
 						res.end(response.docSentiment.score);
 					}
 					con.query(insertStmt);
 					console.log(JSON.stringify(response, null, 2));
 				}});
 			}else{
-				res.end(rows[0].sentiment);
+				res.end(rows[0].sentiment / 1000000);
 			}
 		});
 });
