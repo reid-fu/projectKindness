@@ -37,11 +37,12 @@ con.connect(function(err){
 });
 
 //db constants
-var getQueryPrefix = 'SELECT * FROM ngramsentiment WHERE ngram=';
+var getQueryPrefix = "SELECT * FROM ngramsentiment WHERE ngram=\'";
 
 
 app.get('/', function (request, res) {
-con.query(getQueryPrefix + request.query.text, function(err, rows){
+con.query(getQueryPrefix + request.query.text + "\'", function(err, rows){
+			if(err) throw err;
 			if(rows.length == 0){
 				var parameters = {
 					text: request.query.text
