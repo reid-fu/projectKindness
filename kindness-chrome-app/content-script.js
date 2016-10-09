@@ -56,21 +56,36 @@ function setupTextArea(textArea) {
   }
 }
 
-function inputChanged(textBox) {
+function inputChanged(textArea) {
 	window.charCount++;
 	if(window.charCount % 7 == 0){
-		sendInput(textBox, null);
+    console.log(textArea);
+    console.log(textArea.parentElement);
+    console.log($(textArea.parentElement).find(".kindness-bar"));
+		sendInput(textArea);
 	}
 }
-function sendInput(textArea, callback) {
+
+function sendInput(textArea) {
 	 var xmlHttp = new XMLHttpRequest();
-     xmlHttp.onreadystatechange = function() {
-         if (xmlHttp.readyState == 4 && xmlHttp.status == 200){
-             callback(xmlHttp.responseText);
-         }
+   xmlHttp.onreadystatechange = function() {
+     if (xmlHttp.readyState == 4 && xmlHttp.status == 200) {
+         callback(xmlHttp.responseText, textArea);
      }
-     text = encodeURIComponent(textArea.value);
-     url = "https://ec2-54-163-44-93.compute-1.amazonaws.com:8443/?text=" + text;
-     xmlHttp.open("GET", url, true); // true for asynchronous
-     xmlHttp.send(null);
+   }
+   text = encodeURIComponent(textArea.value);
+   url = "https://ec2-54-163-44-93.compute-1.amazonaws.com:8443/?text=" + text;
+   xmlHttp.open("GET", url, true); // true for asynchronous
+   xmlHttp.send(null);
+}
+
+function callback(responseText, textArea) {
+  console.log(responseText);
+  console.log(textArea);
+  console.log(textArea.parentElement);
+  var neededBar = $(textArea.parentElement).find(".kindness-bar");
+  scaledReponse = responseText * 60.0;
+  var hue = 60 + scaledReponse;
+  console.log(hue);// go from green to red
+  neededBar.css("background-color", "hsl(" + hue + ", 100%, 50%)");
 }
