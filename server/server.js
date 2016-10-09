@@ -37,12 +37,12 @@ con.connect(function(err){
 });
 
 //db constants
-var getQueryPrefix = "SELECT * FROM ngramsentiment ?";
+var getQueryPrefix = "SELECT * FROM ngramsentiment WHERE ";
 
 
 app.get('/', function (request, res) {
-		var input = {ngram: request.query.text};
-		con.query(getQueryPrefix + "\';", input, function(err, rows){
+		var input = getQueryPrefix + con.escape(request.query.text);
+		 con.query(input, function(err, rows){
 			if(err) throw err;
 			if(rows.length == 0){
 				var parameters = {
@@ -53,19 +53,17 @@ app.get('/', function (request, res) {
 				if (err) {
 					console.log('error:', err);
 				} else {
-					var inp = {ngram: parameters.text};
-					var insertStmt = "insert into ngramsentiment ?";
+					var insertStmt = "insert into ngramsentiment values(" + con.escape(parameters.text) + ",";
 					if(!("score" in response.docSentiment) && response.docSentiment.type == "neutral"){
-						inp[sentiment] = 0;
+						insertStmt += "0);";
 						res.end("0");
 					} else {
-						inp[sentiment] (response.docSentiment.score*1000000);
+						insertStmt += (response.docSentiment.score*1000000);
+						insertStmt += ");";
 						res.end(response.docSentiment.score);
 					}
-					con.query(insertStmt, inp, function(err, response){
-						if(err) throw err;
-						console.log("added " + response);
-					});
+					con.query(insertStmt);
+					console.log(parameters.text);
 					console.log(JSON.stringify(response, null, 2));
 				}});
 			}else{
