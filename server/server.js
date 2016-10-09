@@ -1,13 +1,23 @@
+var fs = require('fs');
+var http = require('http');
+var https = require('https');
+var privateKey  = fs.readFileSync('key.pem', 'utf8');
+var certificate = fs.readFileSync('cert.pem', 'utf8');
+
+var credentials = {key: privateKey, cert: certificate};
+
+var watson = require('watson-developer-cloud');
+var alchemy_language = watson.alchemy_language({
+  api_key: 'bc5336851577a2cf1e01df99007fd2a538ef6298'
+})
+
+
 var express = require('express');
 var bodyparser = require('body-parser');
 var app = express();
 app.use(bodyparser.json());
 app.use(bodyparser.urlencoded({ extended: true }));
 
-var watson = require('watson-developer-cloud');
-var alchemy_language = watson.alchemy_language({
-  api_key: 'bc5336851577a2cf1e01df99007fd2a538ef6298'
-})
 
 
 app.get('/', function (request, res) {
@@ -29,9 +39,8 @@ app.get('/', function (request, res) {
 })
 
 
-var server = app.listen(1320,"0.0.0.0", function () {
-   var host = server.address().address
-   var port = server.address().port
+var httpServer = http.createServer(app);
+var httpsServer = https.createServer(credentials, app);
 
-   console.log("Example app listening at http://%s:%s", host, port)
-});
+httpServer.listen(8080);
+httpsServer.listen(8443);
