@@ -58,5 +58,6 @@ var setNgrams = new Set(nGrams);
 nGrams = Array.from(setNgrams);
 
 //return word to call
+console.log(nGrams);
 return nGrams;
 }
